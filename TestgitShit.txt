@@ -1,16 +1,10 @@
 GitShit
-vincent noob
-System.out.print("CARLO IDIOT");
-System.out.print("CARLO IDIOT");
-System.out.print("CARLO IDIOT");
-System.out.print("CARLO IDIOT");
-System.out.print("CARLO IDIOT");
-System.out.print("CARLO IDIOT");
-System.out.print("CARLO IDIOT");
-System.out.print("CARLO IDIOT");
-System.out.print("CARLO IDIOT");
-System.out.print("CARLO IDIOT");
-System.out.print("CARLO IDIOT");
-System.out.print("CARLO IDIOT");
-System.out.print("CARLO IDIOT");
-System.out.print("CARLO IDIOT");
+vincent pro
+
+System.out.print("Charlie kupal");
+System.out.print("Charlie kupal");
+System.out.print("Charlie kupal");
+System.out.print("Charlie kupal");
+System.out.print("Charlie kupal");
+System.out.print("Charlie kupal");
+
