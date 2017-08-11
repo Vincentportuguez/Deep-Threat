@@ -29,10 +29,6 @@ public class AdminLoginUI extends JFrame {
 
 	public AdminLoginUI() {
 		setTitle("Payroll System");
-		setIconImage(Toolkit.getDefaultToolkit().getImage("C:\\Users\\Charlie\\eclipse-workspace\\PayIdiot\\src\\Images\\one.jpg"));
-		background = new JLabel();
-		background.setIcon(new ImageIcon("C:\\Users\\Charlie\\eclipse-workspace\\PayIdiot\\src\\Images\\admin.jpg"));
-		background.setBounds(0, 0, 580, 349);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 580, 349);
 		contentPane = new JPanel();
