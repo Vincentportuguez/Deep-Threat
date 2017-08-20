@@ -23,17 +23,24 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.awt.event.ActionEvent;
 
 public class EmpLoginUI extends JFrame {
 
 	private JPanel contentPane;
 	private JLabel background;
-	private JTextField textField;
-	private JPasswordField passwordField;
+	private JTextField userTF;
+	private JPasswordField passTF;
 
 	public EmpLoginUI() {
 		setTitle("Payroll System");
+		setIconImage(Toolkit.getDefaultToolkit()
+				.getImage("C:\\Users\\Charlie\\eclipse-workspace\\PayIdiot\\src\\Images\\one.jpg"));
+		background = new JLabel();
+		background.setIcon(new ImageIcon("C:\\Users\\Charlie\\eclipse-workspace\\PayIdiot\\src\\Images\\one.jpg"));
+		background.setBounds(0, 0, 564, 310);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 580, 349);
 		contentPane = new JPanel();
@@ -41,12 +48,11 @@ public class EmpLoginUI extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		centerFrame();
-		
-		
-		textField = new JTextField();
-		textField.setBounds(117, 83, 169, 31);
-		contentPane.add(textField);
-		textField.setColumns(10);
+
+		userTF = new JTextField();
+		userTF.setBounds(117, 83, 169, 31);
+		contentPane.add(userTF);
+		userTF.setColumns(10);
 
 		JLabel lblEmployeeLogin = new JLabel("Employee Login:");
 		lblEmployeeLogin.setBounds(28, 23, 101, 31);
@@ -63,35 +69,39 @@ public class EmpLoginUI extends JFrame {
 		lblPassword.setForeground(Color.WHITE);
 		contentPane.add(lblPassword);
 
-		passwordField = new JPasswordField();
-		
-		passwordField.setBounds(117, 125, 169, 31);
-		contentPane.add(passwordField);
+		passTF = new JPasswordField();
+
+		passTF.setBounds(117, 125, 169, 31);
+		contentPane.add(passTF);
 
 		JButton btnLogin = new JButton("Login");
 		btnLogin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(textField.getText().length()==0)  {
-				      JOptionPane.showMessageDialog(null, "Empty fields detected ! Please fill up all fields");
+				String dbURL = "jdbc:db2://localhost:50000/payroll";
+				String username = "Charlie";
+				String password = "1231234";
+
+				try (Connection conn = DriverManager.getConnection(dbURL, username, password)) {
+
+					String sql = "select * from empaccount where username=? and password=?";
+
+					PreparedStatement statement = conn.prepareStatement(sql);
+					statement.setString(1, userTF.getText());
+					statement.setString(2, passTF.getText());
+					ResultSet rs = statement.executeQuery();
+
+					if (rs.next()) {
+						new EmpProfileUI();
+						dispose();
+					} else {			
+						JOptionPane.showMessageDialog(null, "Invalid username or password");
+					}
+				} catch (Exception e1) {
+					e1.printStackTrace();
 				}
-				   else if(passwordField.getPassword().length==0) {
-				      JOptionPane.showMessageDialog(null, "Empty fields detected ! Please fill up all fields");
-				   }
-				      
-				   else{
-				       String user = textField.getText();  
-				       char[] pass = passwordField.getPassword();
-				       String pwd = pass.toString();
-				       if(Login(user,pwd))
-				          JOptionPane.showMessageDialog(null, "Correct Login Credentials");        
-				       else
-				          JOptionPane.showMessageDialog(null, "Incorrect Login Credentials");
-				   }        
-				
-			
 			}
 		});
-		
+
 		btnLogin.setFont(new Font("Calibri", Font.BOLD, 14));
 		btnLogin.setBackground(Color.DARK_GRAY);
 		btnLogin.setForeground(Color.white);
@@ -112,7 +122,7 @@ public class EmpLoginUI extends JFrame {
 		btnEmp.setUI(new StyledButtonUI());
 		btnEmp.setBounds(384, 109, 139, 31);
 		contentPane.add(btnEmp);
-		
+
 		JButton btnExit = new JButton("Exit");
 		btnExit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -125,7 +135,7 @@ public class EmpLoginUI extends JFrame {
 		btnExit.setUI(new StyledButtonUI());
 		btnExit.setBounds(190, 235, 96, 31);
 		contentPane.add(btnExit);
-		
+
 		JLabel lblForgotPassword = new JLabel("Forgot Password?");
 		lblForgotPassword.setBounds(30, 197, 111, 23);
 		lblForgotPassword.setForeground(Color.WHITE);
@@ -139,6 +149,7 @@ public class EmpLoginUI extends JFrame {
 		new EmpLoginUI();
 
 	}
+
 	private void centerFrame() {
 
 		Dimension windowSize = getSize();
@@ -149,6 +160,7 @@ public class EmpLoginUI extends JFrame {
 		int dy = centerPoint.y - windowSize.height / 2;
 		setLocation(dx, dy);
 	}
+
 	class StyledButtonUI extends BasicButtonUI {
 
 		@Override
@@ -176,32 +188,5 @@ public class EmpLoginUI extends JFrame {
 			g.fillRoundRect(0, yOffset, size.width, size.height + yOffset - 5, 10, 10);
 		}
 	}
-	public boolean Login(String user, String pass) {
-		String dbURL = "jdbc:db2://localhost:50000/payroll";
-		String username = "Charlie";
-		String password = "1231234";
-		
-		try (Connection conn = DriverManager.getConnection(dbURL, username, password)) {
 
-			String sql = "select * from employeeuser where username=? and password=?";
-
-			PreparedStatement statement = conn.prepareStatement(sql);
-			statement.setString(1, user);
-			statement.setString(2, pass);
-			
-			 ResultSet rs = statement.executeQuery();
-			 
-			 if(rs.next()) {
-				 new EmpProfileUI();
-			 }
-		      
-		                      
-		   }
-		   catch(Exception e){
-		       e.printStackTrace();
-		       
-		   }
-		return rootPaneCheckingEnabled;       
-			
-	}
 }
