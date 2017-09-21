@@ -2,32 +2,30 @@ package view;
 
 import java.awt.*;
 
+
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.plaf.basic.BasicButtonUI;
 
-import view.AdminLoginUI.StyledButtonUI;
+import CaseStudy.AdminLoginUI.StyledButtonUI;
 
 import javax.swing.JTextField;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import javax.swing.AbstractButton;
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
-
 import java.awt.event.ActionListener;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.ActionEvent;
 
-public class EmpLoginUI extends JFrame {
+public class EmpLoginUI extends JFrame implements KeyListener{
+
 
 	private JPanel contentPane;
 	private JLabel background;
@@ -36,15 +34,15 @@ public class EmpLoginUI extends JFrame {
 
 	public EmpLoginUI() {
 		setTitle("Payroll System");
-		setIconImage(Toolkit.getDefaultToolkit()
-				.getImage("C:\\Users\\Charlie\\eclipse-workspace\\PayIdiot\\src\\Images\\one.jpg"));
+		
 		background = new JLabel();
-		background.setIcon(new ImageIcon("C:\\Users\\Charlie\\eclipse-workspace\\PayIdiot\\src\\Images\\one.jpg"));
-		background.setBounds(0, 0, 564, 310);
+		background.setIcon(new ImageIcon("/Users/carendelapena/Documents/Payroll/src/Photos/emp.png"));
+		background.setBounds(340, 0, 564, 210);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 580, 349);
+		setBounds(250, 200, 580, 359);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		contentPane.setBackground(Color.DARK_GRAY);
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		centerFrame();
@@ -55,7 +53,7 @@ public class EmpLoginUI extends JFrame {
 		userTF.setColumns(10);
 
 		JLabel lblEmployeeLogin = new JLabel("Employee Login:");
-		lblEmployeeLogin.setBounds(28, 23, 101, 31);
+		lblEmployeeLogin.setBounds(50, 20, 108, 61);
 		lblEmployeeLogin.setForeground(Color.WHITE);
 		contentPane.add(lblEmployeeLogin);
 
@@ -70,71 +68,51 @@ public class EmpLoginUI extends JFrame {
 		contentPane.add(lblPassword);
 
 		passTF = new JPasswordField();
-
+        passTF.addKeyListener(this);
 		passTF.setBounds(117, 125, 169, 31);
 		contentPane.add(passTF);
-
-		JButton btnLogin = new JButton("Login");
+		JButton btnLogin ;
+		btnLogin = new JButton();
+		btnLogin.setIcon(new ImageIcon("/Users/carendelapena/Documents/Payroll/src/Photos/login.png"));
+		
+	
+		
 		btnLogin.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
-				String dbURL = "jdbc:db2://localhost:50000/payroll";
-				String username = "Charlie";
-				String password = "1231234";
+				btnLogin() ;
+				EmpLoginCtrl();
+			}
 
-				try (Connection conn = DriverManager.getConnection(dbURL, username, password)) {
-
-					String sql = "select * from empaccount where username=? and password=?";
-
-					PreparedStatement statement = conn.prepareStatement(sql);
-					statement.setString(1, userTF.getText());
-					statement.setString(2, passTF.getText());
-					ResultSet rs = statement.executeQuery();
-
-					if (rs.next()) {
-						new EmpProfileUI();
-						dispose();
-					} else {			
-						JOptionPane.showMessageDialog(null, "Invalid username or password");
-					}
-				} catch (Exception e1) {
-					e1.printStackTrace();
-				}
+			public void EmpLoginCtrl() {
+				// TODO Auto-generated method stub
+				
 			}
 		});
 
-		btnLogin.setFont(new Font("Calibri", Font.BOLD, 14));
+	
 		btnLogin.setBackground(Color.DARK_GRAY);
-		btnLogin.setForeground(Color.white);
 		btnLogin.setUI(new StyledButtonUI());
-		btnLogin.setBounds(190, 193, 96, 31);
+		btnLogin.setBounds(150, 233, 156, 51);
 		contentPane.add(btnLogin);
+
 
 		JButton btnEmp = new JButton("Admin Login");
 		btnEmp.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				new AdminLoginUI();
 				dispose();
 			}
 		});
 		btnEmp.setFont(new Font("Calibri", Font.BOLD, 14));
-		btnEmp.setBackground(Color.DARK_GRAY);
+		btnEmp.setBackground(Color.BLACK);
 		btnEmp.setForeground(Color.white);
 		btnEmp.setUI(new StyledButtonUI());
-		btnEmp.setBounds(384, 109, 139, 31);
+		btnEmp.setBounds(354, 189, 149, 31);
 		contentPane.add(btnEmp);
 
-		JButton btnExit = new JButton("Exit");
-		btnExit.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				dispose();
-			}
-		});
-		btnExit.setFont(new Font("Calibri", Font.BOLD, 14));
-		btnExit.setBackground(Color.DARK_GRAY);
-		btnExit.setForeground(Color.white);
-		btnExit.setUI(new StyledButtonUI());
-		btnExit.setBounds(190, 235, 96, 31);
-		contentPane.add(btnExit);
+		
 
 		JLabel lblForgotPassword = new JLabel("Forgot Password?");
 		lblForgotPassword.setBounds(30, 197, 111, 23);
@@ -145,12 +123,13 @@ public class EmpLoginUI extends JFrame {
 		setVisible(true);
 	}
 
+
 	public static void main(String[] args) {
 		new EmpLoginUI();
 
 	}
 
-	private void centerFrame() {
+        private void centerFrame() {
 
 		Dimension windowSize = getSize();
 		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
@@ -189,4 +168,55 @@ public class EmpLoginUI extends JFrame {
 		}
 	}
 
+
+	@Override
+	public void keyTyped(KeyEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+
+	@Override
+	public void keyPressed(KeyEvent e) {
+	
+		if(e.getKeyCode()==KeyEvent.VK_ENTER)
+		{
+	     btnLogin();
+			
+		}
+	}
+
+
+	public void btnLogin() {
+		// TODO Auto-generated method stub
+		
+				String uname=userTF.getText();
+				String pass=passTF.getText();
+				if(uname.equals("username")	&& pass.equals("password")){
+					final ImageIcon icon = new ImageIcon("/Users/carendelapena/Documents/Payroll/src/Photos/Log.png");
+			        JOptionPane.showMessageDialog(null, "Hello User, You are successfully logined. ", "EMPLOYEE PROFILE", JOptionPane.INFORMATION_MESSAGE, icon);
+			        userTF.setText(null);
+				    passTF.setText(null);
+			          
+		    
+		          
+		    	dispose();}
+				else{
+					userTF.setText(null);
+					passTF.setText(null);
+					final ImageIcon icon2 = new ImageIcon("/Users/carendelapena/Documents/Payroll/src/Photos/Error.png");
+		    		JOptionPane.showMessageDialog(null, "The username or password is incorrect","EMPLOYEE PROFILE",JOptionPane.INFORMATION_MESSAGE,icon2);
+	    		}
+			
+		
+	}
+
+
+	@Override
+	public void keyReleased(KeyEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
 }
+	
