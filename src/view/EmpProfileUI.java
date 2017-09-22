@@ -3,41 +3,47 @@ package view;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.EventQueue;
-import java.awt.Font;
 import java.awt.GraphicsEnvironment;
+import java.awt.Image;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.plaf.ButtonUI;
+
+
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.JSeparator;
-import java.awt.Panel;
 import java.awt.Point;
 import java.awt.Toolkit;
-import javax.swing.JComboBox;
 import java.awt.event.ActionListener;
+
 import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.awt.event.ActionEvent;
+import javax.swing.plaf.basic.BasicButtonUI;
 
+import k.AdminLoginUI.StyledButtonUI;
+import k.AdminLoginUI;
+
+import java.sql.*;
+import net.sf.jasperreports.engine.*;
+import net.sf.jasperreports.view.*;
+import net.sf.jasperreports.design.*;
+import net.sf.jasperreports.xml.*;
 public class EmpProfileUI extends JFrame {
-
+   
 	private JPanel contentPane;
 	private JTextField empNameTF;
 	private JTextField idTF;
 	private JLabel background;
 	private Connection con;
-	private Statement st;
+    private Statement st;
 	private ResultSet rs;
 	private JTextField bpTF;
 	private JTextField allowTF;
@@ -50,26 +56,32 @@ public class EmpProfileUI extends JFrame {
 
 	public EmpProfileUI() throws ClassNotFoundException, SQLException {
 		setTitle("Edit Employee");
-		setIconImage(Toolkit.getDefaultToolkit()
-				.getImage("C:\\Users\\Charlie\\eclipse-workspace\\PayIdiot\\src\\Images\\one.jpg"));
+		
 		background = new JLabel();
-		background
-				.setIcon(new ImageIcon("C:\\Users\\Charlie\\eclipse-workspace\\PayIdiot\\src\\Images\\empprofile.jpg"));
-		background.setBounds(0, 0, 804, 643);
+	
+		
+		background.setIcon(new ImageIcon("/Users/caren/Documents/Logo.png"));
+		background.setBounds(330, 10, 804, 643);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 804, 643);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
+		//contentPane.setLayout(new BorderLayout());
+		//contentPane.add(lblEmpName, BorderLayout.LINE_START);
+		
+		//centerFrame();
+        contentPane.setBackground(Color.DARK_GRAY);
+		JLabel lblEmpName = new JLabel("Emp Name :");
+		lblEmpName.setForeground(Color.WHITE);
+		lblEmpName.setBounds(36, 36, 75, 29);
 		contentPane.setLayout(null);
-		centerFrame();
-
-		JLabel lblEmpName = new JLabel("Emp Name");
-		lblEmpName.setBounds(46, 46, 65, 19);
+		//contentPane.add(lblEmpName, BorderLayout.LINE_START);
 
 		contentPane.add(lblEmpName);
 
 		JLabel lblId = new JLabel("ID");
+		lblId.setForeground(Color.WHITE);
 		lblId.setBounds(46, 76, 46, 14);
 
 		contentPane.add(lblId);
@@ -94,10 +106,12 @@ public class EmpProfileUI extends JFrame {
 
 		JLabel lblBasicPay = new JLabel("Basic Pay:");
 		lblBasicPay.setBounds(157, 194, 65, 16);
+		lblBasicPay.setForeground(Color.WHITE);
 		contentPane.add(lblBasicPay);
 
 		JLabel lblAllowance = new JLabel("Allowance:");
-		lblAllowance.setBounds(157, 224, 65, 19);
+		lblAllowance.setBounds(157, 224, 165, 19);
+		lblAllowance.setForeground(Color.WHITE);
 		contentPane.add(lblAllowance);
 
 		allowTF = new JTextField();
@@ -108,6 +122,7 @@ public class EmpProfileUI extends JFrame {
 
 		JLabel lblOvertime = new JLabel("Overtime: ");
 		lblOvertime.setBounds(157, 257, 65, 19);
+		lblOvertime.setForeground(Color.WHITE);
 		contentPane.add(lblOvertime);
 
 		otTF = new JTextField();
@@ -118,9 +133,11 @@ public class EmpProfileUI extends JFrame {
 
 		JLabel lblDeductions = new JLabel("Deductions");
 		lblDeductions.setBounds(500, 148, 112, 26);
+		lblDeductions.setForeground(Color.WHITE);
 		contentPane.add(lblDeductions);
 
 		JLabel lblSss = new JLabel("SSS:");
+		lblSss.setForeground(Color.WHITE);
 		lblSss.setBounds(417, 195, 52, 20);
 		contentPane.add(lblSss);
 
@@ -132,6 +149,7 @@ public class EmpProfileUI extends JFrame {
 
 		JLabel lblPhilhealth = new JLabel("PhilHealth");
 		lblPhilhealth.setBounds(417, 225, 65, 17);
+		lblPhilhealth.setForeground(Color.WHITE);
 		contentPane.add(lblPhilhealth);
 
 		phTF = new JTextField();
@@ -142,6 +160,7 @@ public class EmpProfileUI extends JFrame {
 
 		JLabel lblHdmf = new JLabel("HDMF:");
 		lblHdmf.setBounds(417, 258, 55, 17);
+		lblHdmf.setForeground(Color.WHITE);
 		contentPane.add(lblHdmf);
 
 		hdmfTF = new JTextField();
@@ -151,11 +170,18 @@ public class EmpProfileUI extends JFrame {
 		contentPane.add(hdmfTF);
 
 		JLabel lblNetpay = new JLabel("NetPay");
+		lblNetpay.setForeground(Color.WHITE);
 		lblNetpay.setBounds(272, 366, 65, 19);
 		contentPane.add(lblNetpay);
 
 		JButton btnCompute = new JButton("Compute");
+		btnCompute.setBackground(Color.BLACK);
+		
+		btnCompute.setForeground(Color.BLACK);
+		//btnCompute.setIcon(new ImageIcon("/Users/caren/Documents/Loading.gif"));
+		
 		btnCompute.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				double bp = Double.parseDouble(bpTF.getText());
 				double allow = Double.parseDouble(allowTF.getText());
@@ -175,9 +201,48 @@ public class EmpProfileUI extends JFrame {
 
 			}
 		});
-		btnCompute.setBounds(346, 403, 112, 26);
+		btnCompute.setBounds(346, 403, 112, 46);
+		btnCompute.setBackground(Color.BLACK);
+	
 		contentPane.add(btnCompute);
+        
+		JButton btnReport =new JButton("Receipt");
+        btnReport.setForeground(Color.BLACK);
+        contentPane.add(btnReport);
+        btnReport.setBounds(346, 453, 112, 46);
+        btnReport.addActionListener(new ActionListener(){
 
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				if(e.getSource() instanceof JButton){
+					if(e.getActionCommand().equals("Report")){
+					showReport();
+					} 
+					}
+				}
+
+			private void showReport() {
+				try{
+				JasperDesign jasperDesign = JRXmlLoader.load(JrxmlFilePath);
+				JasperReport jasperReport = JasperCompileManager.compileReport(jasperDesign);
+				java.sql.Connection con=//write your connection here;
+
+				JasperPrint jasperPrint=JasperFillManager.fillReport(jasperReport,null,connection);
+				JasperExportManager.exportReporttoPdfFile(jasperPrint,"destination.pdf");
+				  Runtime.getRuntime().exec("");
+				}catch(JRException | IOException e){
+					e.printStackTrace();
+				}
+					
+				}
+			
+				
+					});	
+					
+        
+     
+        
 		npTF = new JTextField();
 		npTF.setColumns(10);
 		npTF.setEditable(false);
@@ -186,6 +251,7 @@ public class EmpProfileUI extends JFrame {
 
 		JLabel lblTax = new JLabel("Tax");
 		lblTax.setBounds(417, 290, 54, 19);
+		lblTax.setForeground(Color.WHITE);
 		contentPane.add(lblTax);
 
 		taxTF = new JTextField();
@@ -194,12 +260,12 @@ public class EmpProfileUI extends JFrame {
 		taxTF.setBounds(479, 286, 46, 26);
 		contentPane.add(taxTF);
 
-		JLabel label = new JLabel("%");
-		label.setBounds(535, 290, 20, 22);
+		JLabel label = new JLabel("");
+	   label.setBounds(426, 362, 136, 26);
 		contentPane.add(label);
 
 		display();
-		// contentPane.add(background);
+		 contentPane.add(background);
 		setVisible(true);
 
 	}
@@ -231,7 +297,7 @@ public class EmpProfileUI extends JFrame {
 		String sql = "select * from employees order by empname";
 		rs = st.executeQuery(sql);
 
-		try {
+	    try {
 			rs.next();
 			{
 
@@ -247,7 +313,7 @@ public class EmpProfileUI extends JFrame {
 			}
 
 		} catch (SQLException ex) {
-			ex.printStackTrace();
+		ex.printStackTrace();
 		}
 	}
 }
